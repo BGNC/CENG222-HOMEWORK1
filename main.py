@@ -1,41 +1,77 @@
 import random as r
 import matplotlib.pyplot as plt
 
-numberOfEvents = 1000000
-ct1 = 0
-ct2 = 0
-ct3 = 0
 
-probs1 = []
+def probs(trial):
+    probs1 = []
+    probs2 = []
+    probs3 = []
+    firstCounter, secondCounter, thirdCounter = 0, 0, 0
 
-for x in range(1, numberOfEvents+1):
-    listOfDice = []
-    for i in range(5):
-        dice = r.randint(1, 6)
-        listOfDice.append(dice)
+    for _ in range(1, trial + 1):
+        listOfDice = []
+        for i in range(5):
+            dice = r.randint(1, 6)
+            listOfDice.append(dice)
 
-    if 3 in listOfDice:
-        ct1 += 1
-        probs1.append(ct1 / x)
-        if (2 or 4 or 6) in listOfDice:
-            ct2 += 1
+        if 3 in listOfDice:
+            firstCounter += 1
+        probs1.append(firstCounter / _)
 
-        evenCounter = 0
-        for c in listOfDice:
+    for _ in range(1, trial + 1):
+        listOfDice = []
+        for i in range(4):
+            dice = r.randint(1, 6)
+            listOfDice.append(dice)
 
-            if c == (2 or 4 or 6):
-                evenCounter += 1
-        if evenCounter == 1:
-            ct3 += 1
+        if 3 in listOfDice:
+            secondCounter += 1
+        probs2.append(secondCounter / _)
+
+    for _ in range(1, trial + 1):
+        listOfDice = []
+        for i in range(4):
+            dice = r.randrange(1, 6, 2)
+            listOfDice.append(dice)
+        if 3 in listOfDice:
+            thirdCounter += 1
+        probs3.append(thirdCounter / _)
+
+    return firstCounter, secondCounter, thirdCounter, probs1, probs2, probs3
 
 
+def theoreticalSolutionsOutput():
+    print("Theoretical Solutions")
+    print(1 - (5 / 6) * (5 / 6) * (5 / 6) * (5 / 6) * (5 / 6))
+    print(1 - (5 / 6) * (5 / 6) * (5 / 6) * (5 / 6))
+    print(1 - (2 / 3) * (2 / 3) * (2 / 3) * (2 / 3))
 
 
-print(ct1 / numberOfEvents)
+ct1, ct2, ct3, probs1, probs2, probs3 = probs(1000000)
 
-print(ct2 / numberOfEvents)
 
-print(ct3 / numberOfEvents)
+def experimentalSolutionsOutput():
+    print("Experimental Solutions")
+    print(ct1 / 1000000)
+    print(ct2 / 1000000)
+    print(ct3 / 1000000)
 
-plt.plot(probs1)
+
+theoreticalSolutionsOutput()
+experimentalSolutionsOutput()
+
+plt.plot([probs1[9], probs1[49], probs1[99], probs1[499], probs1[999], probs1[4999], probs1[9999], probs1[49999],
+          probs1[99999], probs1[499999], probs1[999999]])
+
+plt.show()
+
+plt.plot([probs2[9], probs2[49], probs2[99], probs2[499], probs2[999], probs2[4999], probs2[9999], probs2[49999],
+
+          probs2[99999], probs2[499999], probs2[999999]])
+
+plt.show()
+
+plt.plot([probs3[9], probs3[49], probs3[99], probs3[499], probs3[999], probs3[4999], probs3[9999], probs3[49999],
+
+          probs3[99999], probs3[499999], probs3[999999]])
 plt.show()
